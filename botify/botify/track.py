@@ -77,6 +77,15 @@ class Catalog:
             f"Uploaded {len(self.tracks)} tracks, {len(self.tracks_with_diverse_recs)} tracks with diverse recs"
         )
 
+    def upload_tracks_custom(self, redis_tracks):
+        self.app.logger.info(f"Uploading tracks to redis")
+        for track in self.tracks:
+            redis_tracks.set(track.track, self.to_bytes(track))
+
+        self.app.logger.info(
+            f"Uploaded {len(self.tracks)} tracks"
+        )
+
     def upload_artists(self, redis):
         self.app.logger.info(f"Uploading artists to redis")
         sorted_tracks = sorted(self.tracks, key=lambda track: track.artist)
